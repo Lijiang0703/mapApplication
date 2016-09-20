@@ -1,0 +1,62 @@
+<html>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<title>who first home</title>
+	<head>
+		<style type="text/css">
+			*{
+				margin:0;
+				padding: 0;
+			}
+			body{
+				width:100%;
+				height:100%;
+				position: relative;
+			}
+			#showposition{
+				width: 100%;
+				height:20%;
+				text-align: center;
+				vertical-align: center;
+			}
+			#markPage{
+				width:100%;
+				/*height:80%;*/
+				top:20%;
+			}
+			#getpos,#markPage,.nav,#mpcontainer{
+				position: absolute;
+			}
+			#mpcontainer{
+				width :100%;
+				height:70%;
+			}
+		</style>
+		<script type="text/javascript" charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=PILBZ-QBV35-T3ZI3-QZP5X-WUV2F-27F3J"></script>
+		<script type="text/javascript" src="http://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js "></script>
+	</head>
+	<body>
+		<div id="showposition"></div>
+		<div id="mpcontainer"></div>
+		<div class="nav">
+			<input type="button" value="分享位置" id="shareplace">
+		</div> 
+		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src ='/js/mapdetail.js'></script>
+		<script type="text/javascript">
+			var socket = io();
+			var _map = new openMap();
+
+			if("geolocation" in navigator){
+				_map.init(function(_loc){socket.emit('push loc',_loc)});
+			}else{
+				alert('你的手机不支持定位');
+			}
+			socket.on('others location',function(loc){
+				console.log('get location',loc);
+				_map.setOtherLoc(loc);		//非自己当前的位置		
+			})
+		</script>
+		<!-- <iframe id="markPage" width="100%" height="70%" frameborder=0 scrolling="no" src=""></iframe> -->
+	</body>
+</html>
